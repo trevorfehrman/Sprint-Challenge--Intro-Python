@@ -13,19 +13,18 @@ cities = []
 
 def cityreader(cities):
     with open('cities.csv') as csvfile:
-        reader = csv.reader(csvfile)
-        next(reader)
-        for row in reader:
-            cities.append(City(row[0], row[3], row[4]))
+        parsed_data = csv.reader(csvfile)
+        next(parsed_data)
+        for record in parsed_data:
+            cities.append(City(record[0], record[3], record[4]))
     return cities
 
 
-# cityreader(cities)
+cityreader(cities)
 
 # # Print the list of cities (name, lat, lon), 1 record per line.
-for c in cities:
-    # Write a list comprehension that creates a list of all the ages plus 10.
-    print(c.name, c.lat, c.lon)
+for city in cities:
+    print(city.name, city.lat, city.lon)
 
 # STRETCH GOAL!
 #
@@ -58,13 +57,51 @@ for c in cities:
 
 # TODO Get latitude and longitude values from the user
 
+coords_alpha = input("Gimme: lat, lon: ").split(",")
+
+coords_beta = input("Gimme: lat, lon again: ").split(",")
+
+coords_alpha[0] = int(coords_alpha[0])
+coords_alpha[1] = int(coords_alpha[1])
+
+coords_beta[0] = int(coords_beta[0])
+coords_beta[1] = int(coords_beta[1])
+
+small_lat = None
+big_lat = None
+small_lon = None
+big_lon = None
+
+if coords_alpha[0] < coords_beta[0]:
+    small_lat = coords_alpha[0]
+    big_lat = coords_beta[0]
+else:
+    small_lat = coords_beta[0]
+    big_lat = coords_alpha[0]
+
+if coords_alpha[1] < coords_beta[1]:
+    small_lon = coords_alpha[1]
+    big_lon = coords_beta[1]
+else:
+    small_lon = coords_beta[1]
+    big_lon = coords_alpha[1]
+
+print(small_lat, big_lat, small_lon, big_lon)
+
 
 def cityreader_stretch(lat1, lon1, lat2, lon2, cities=[]):
     # within will hold the cities that fall within the specified region
-    within = []
+    # for city in cities:
+    #   if city.lat >= small_lat and city.lat <= big_lat:
+
+    within = [city.name for city in cities if city.lat >= lat1 and city.lat <=
+              lat2 and city.lon >= lon1 and city.lon <= lon2]
 
     # TODO Ensure that the lat and lon valuse are all floats
     # Go through each city and check to see if it falls within
     # the specified coordinates.
-
+    print(within)
     return within
+
+
+cityreader_stretch(small_lat, small_lon, big_lat, big_lon, cities)
